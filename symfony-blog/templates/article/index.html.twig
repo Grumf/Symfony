@@ -1,0 +1,15 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>{{ article.title }}</h1>
+    {% if article.image is not null %}
+        <div class='thumbnail'>
+            <img src="{{ asset('upload/' ~ article.image) }}">
+        </div>
+    {% endif %}
+     <p>Dans <em>{{ article.category }}</em>,
+      de {{ article.author.fullname }}</p>
+     <div class='well'>{{ article.description }}</div>
+     <div>{{ article.content }}</div>
+    
+{% endblock %}

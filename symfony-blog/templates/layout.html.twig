@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog Symfony !{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('style/style.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block body %}
+    
+    {% if is_granted('ROLE_ADMIN') %}
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+
+                <a class="navbar-brand">Menu admin</a>
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="{{ path('app_admin_category_index') }}">
+                                Gestion des catégories
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_admin_article_index') }}">
+                                Gestion des articles
+                            </a>
+                        </li>
+                    </ul>
+            </div>
+        </nav>
+    {% endif %}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('app_index_index') }}">
+                SuperBlogDeOuf
+            </a>
+                {# Pas de route, juste un bout de page #}
+                {{ render(controller('App\\Controller\\CategoryController::menu')) }}
+                <ul class="nav navbar-nav navbar-right">
+                    {% if app.user is null  %}
+                        <li>
+                            <a href="{{ path('app_security_register') }}">
+                                Inscription
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_security_login') }}">
+                                Login
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a>{{ app.user.fullname }}</a>
+                        </li>
+                         <li>
+                            <a href="{{ path('app_security_logout') }}">
+                                Déconnexion
+                            </a>
+                        </li>
+                    {% endif  %}
+                </ul>
+        </div>
+    </nav>  
+            {% for type, messages in app.session.flashbag.all %}
+                {% for message in messages %}
+                    {% if type == 'error' %}
+                        {% set type = 'danger' %}
+                    {% endif %}
+                        <div class="alert alert-{{ type }}">
+                            {{ message|raw }}
+                        </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="container">
+                {% block content %}{% endblock %}
+            </div>
+{% endblock %}

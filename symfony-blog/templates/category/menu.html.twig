@@ -1,0 +1,10 @@
+<ul class="nav navbar-nav">
+    {% for category in categories %}
+        <li>
+            <a href="{{ path('app_category_index', {id: category.id}) }}">
+                {# grace au __toString() #}
+                {{ category }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
